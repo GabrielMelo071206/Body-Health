@@ -16,6 +16,27 @@ from data.models.plano_model import *
 from data.repo.plano_repo import *
 from data.models.treino_model import *
 from data.repo.treino_repo import *
+from data.models.artigo_model import *
+from data.models.salario_model import Salario
+from data.models.denuncia_model import Denuncia
+from datetime import datetime
+from data.models.avaliacao_artigo_model import AvaliacaoArtigo
+from data.models.visualizacao_artigo_model import VisualizacaoArtigo
+
+
+@pytest.fixture
+def avaliacao_artigo_exemplo(usuario_exemplo, artigo_exemplo) -> AvaliacaoArtigo:
+    """Fixture para uma avaliação de artigo feita por um usuário."""
+    return AvaliacaoArtigo(
+        id_avaliacao=0,
+        id_artigo=artigo_exemplo.id_artigo,
+        id_usuario=usuario_exemplo.id,
+        nota=4.5,
+        Data_avaliacao=date.today(),
+        Ativo=True
+    )
+
+
 # from data.repo.treino_repo import *
 
 
@@ -181,4 +202,86 @@ def profissional_exemplo() -> Profissional:
         ativo=True,
         ano_formacao=2014,
         registro_profissional="EDU123456-G/SP"
+    )
+
+@pytest.fixture
+def artigo_exemplo(profissional_exemplo):
+    """Fixture para artigo de exemplo."""
+    return Artigo(
+        id_artigo=0,
+        id_profissional=profissional_exemplo.id,
+        titulo="Importância da Hidratação",
+        conteudo="Beber água é essencial para manter o corpo funcionando corretamente.",
+        data_publicacao=date.today(),
+        visualizacoes=0,
+        ativo=True,
+        avaliacao=1
+    )
+
+import pytest
+from datetime import date
+from data.models.salario_model import Salario
+
+@pytest.fixture
+def salario_exemplo(profissional_exemplo) -> Salario:
+    return Salario(
+        id_salario=0,
+        id_profissional=profissional_exemplo.id,
+        mes_referencia=6,
+        ano_referencia=2025,
+        total_visualizacoes=120,
+        visualizacoes_validas=100,
+        valor_por_visualizacao=0.02,
+        valor_total=2.00,
+        data_calculo=date.today(),
+        status_pagamento="pendente",
+        data_pagamento=None,
+        observacoes="Pagamento em análise",
+        ativo=True
+    )
+
+@pytest.fixture
+def denuncia_exemplo(usuario_exemplo, profissional_exemplo, administrador_exemplo)-> Denuncia:
+    """Retorna uma denúncia de exemplo entre dois usuários fictícios."""
+    return Denuncia(
+        id_denuncia=0,
+        id_denunciante=usuario_exemplo.id,
+        id_denunciado=profissional_exemplo.id,
+        tipo_denunciante="cliente",
+        tipo_denunciado="nutricionista",
+        motivo="Conteúdo impróprio",
+        descricao="O profissional compartilhou conteúdo inadequado no artigo.",
+        data_denuncia=str(datetime.now()),
+        status="pendente",
+        id_admin_avaliador=administrador_exemplo.id,
+        data_avaliacao=str(datetime.now()),
+        observacoes_admin="Aguardando análise.",
+        ativo=True
+    )
+    
+@pytest.fixture
+def avaliacao_artigo_exemplo(usuario_exemplo, artigo_exemplo) -> AvaliacaoArtigo:
+    """Fixture para uma avaliação de artigo feita por um usuário."""
+    return AvaliacaoArtigo(
+        id_avaliacao=0,
+        id_artigo=artigo_exemplo.id_artigo,
+        id_usuario=usuario_exemplo.id,
+        nota=4.5,
+        Data_avaliacao=date.today(),
+        Ativo=True
+    )
+    
+
+@pytest.fixture
+def visualizacao_artigo_exemplo(usuario_exemplo, artigo_exemplo) -> VisualizacaoArtigo:
+    """Fixture para uma visualização de artigo feita por um usuário."""
+    data_visualizacao = date.today()
+    return VisualizacaoArtigo(
+        id_visualizacao=0,
+        id_artigo=artigo_exemplo.id_artigo,
+        id_usuario=usuario_exemplo.id,
+        Data_visualizacao=data_visualizacao,
+        mes_referencia=data_visualizacao.month,
+        ano_referencia=data_visualizacao.year,
+        Ativo=True
     )
