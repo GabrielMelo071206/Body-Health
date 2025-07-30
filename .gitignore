@@ -20,7 +20,7 @@ dist/
 *.egg
 
 # VS Code settings
-.vscode/
+# .vscode/
 
 # Test outputs
 htmlcov/
