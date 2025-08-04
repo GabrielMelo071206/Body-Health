@@ -43,7 +43,14 @@ class TestDietaRepo:
         assert dieta_db.nome == "Dieta Teste"
         assert dieta_db.tipo_dieta == "Low Carb"
         assert dieta_db.ativo is True
-
+        assert dieta_db.id_dieta == id_dieta 
+        assert dieta_db.id_cliente == id_cliente
+        assert dieta_db.id_profissional == id_profissional
+        assert dieta_db.descricao == "Descrição Teste"
+        assert dieta_db.especificacoes == "Especificações Teste"
+        assert date.fromisoformat(dieta_db.data_inicio) == date(2025, 7, 1)
+        assert date.fromisoformat(dieta_db.data_fim) == date(2025, 7, 31)
+    
     def test_obter_dietas_por_cliente(self, test_db, cliente_exemplo, nutricionista_exemplo):
         usuario_repo.criar_tabela_usuario()
         cliente_repo.criar_tabela_cliente()
@@ -102,7 +109,7 @@ class TestDietaRepo:
         assert len(dietas) >= 1
         assert dietas[0].tipo_dieta == "Cetogênica"
 
-    def test_alterar_dieta(self, test_db, cliente_exemplo, nutricionista_exemplo):
+    def test_alterar_dieta(self, test_db, cliente_exemplo, nutricionista_exemplo, dieta_exemplo):
         usuario_repo.criar_tabela_usuario()
         cliente_repo.criar_tabela_cliente()
         profissional_repo.criar_tabela_profissional()
@@ -129,13 +136,31 @@ class TestDietaRepo:
         dieta_editada = dieta_repo.obter_dieta_por_id(id_dieta)
         dieta_editada.nome = "Dieta Alterada"
         dieta_editada.tipo_dieta = "Mediterrânea"
+        dieta_editada.ativo is True 
+        dieta_editada.id_dieta = id_dieta
+        dieta_editada.id_cliente = id_cliente
+        dieta_editada.id_profissional = nutricionista_exemplo.id
+        dieta_editada.descricao = "Descricao alterada"
+        dieta_editada.especificacoes = "Especificações alteradas"
+        dieta_editada.data_inicio = date(2025, 5, 1)
+        dieta_editada.data_fim = date(2025, 7, 31)
+
+        
         resultado = dieta_repo.alterar_dieta(dieta_editada)
 
         assert resultado is True
         dieta_nova = dieta_repo.obter_dieta_por_id(id_dieta)
         assert dieta_nova.nome == "Dieta Alterada"
         assert dieta_nova.tipo_dieta == "Mediterrânea"
-
+        assert dieta_nova.ativo is True
+        assert dieta_nova.id_dieta == id_dieta 
+        assert dieta_nova.id_cliente == id_cliente
+        assert dieta_nova.id_profissional == nutricionista_exemplo.id
+        assert dieta_nova.descricao == "Descricao alterada"
+        assert dieta_nova.especificacoes == "Especificações alteradas"
+        assert date.fromisoformat(dieta_nova.data_inicio) == date(2025, 5, 1)
+        assert date.fromisoformat(dieta_nova.data_fim) == date(2025, 7, 31)
+    
     def test_excluir_dieta(self, test_db, cliente_exemplo, nutricionista_exemplo):
         usuario_repo.criar_tabela_usuario()
         cliente_repo.criar_tabela_cliente()

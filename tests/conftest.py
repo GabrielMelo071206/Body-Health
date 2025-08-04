@@ -255,7 +255,7 @@ def denuncia_exemplo(usuario_exemplo, profissional_exemplo, administrador_exempl
         status="pendente",
         id_admin_avaliador=administrador_exemplo.id,
         data_avaliacao=str(datetime.now()),
-        observacoes_admin="Aguardando análise.",
+        observacoes_admin="Aguardando análise",
         ativo=True
     )
     
@@ -269,6 +269,7 @@ def avaliacao_artigo_exemplo(usuario_exemplo, artigo_exemplo) -> AvaliacaoArtigo
         nota=4.5,
         Data_avaliacao=date.today(),
         Ativo=True
+        
     )
     
 

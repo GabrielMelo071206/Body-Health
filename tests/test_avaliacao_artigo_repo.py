@@ -40,6 +40,11 @@ class Test_avaliacao_artigo_repo:
         assert resultado.id_artigo == id_artigo
         assert resultado.nota == 4.0
 
+        from datetime import datetime
+        data_convertida = datetime.strptime(resultado.Data_avaliacao, "%Y-%m-%d").date()
+        assert data_convertida == date.today(), "A data de avaliação não corresponde à data atual"
+
+
     def test_alterar_avaliacao_artigo(self, test_db, usuario_exemplo, profissional_exemplo, artigo_exemplo):
         criar_tabela_usuario()
         criar_tabela_profissional()
@@ -47,9 +52,12 @@ class Test_avaliacao_artigo_repo:
         criar_tabela_avaliacao_artigo()
 
         id_usuario = inserir_usuario(usuario_exemplo)
+        usuario_exemplo.id = id_usuario 
         id_prof = inserir_profissional(profissional_exemplo)
         artigo_exemplo.id_profissional = id_prof
         id_artigo = inserir_artigo(artigo_exemplo)
+        artigo_exemplo.id_artigo = id_artigo
+
 
         avaliacao = AvaliacaoArtigo(0, id_artigo, id_usuario, 3.0, date.today(), True)
         id_avaliacao = inserir_avaliacao_artigo(avaliacao)
@@ -64,6 +72,14 @@ class Test_avaliacao_artigo_repo:
         atualizado = obter_avaliacao_artigo_por_id(id_avaliacao)
         assert atualizado.nota == 5.0
         assert atualizado.Ativo is False
+        assert atualizado.id_usuario == usuario_exemplo.id
+        
+        from datetime import datetime
+        data_convertida = datetime.strptime(atualizado.Data_avaliacao, "%Y-%m-%d").date()
+        assert data_convertida == date.today(), "A data de avaliação não corresponde à data atual"
+        assert atualizado.id_artigo == artigo_exemplo.id_artigo
+
+
 
     def test_excluir_avaliacao_artigo(self, test_db, avaliacao_artigo_exemplo, usuario_exemplo, profissional_exemplo, artigo_exemplo):
         criar_tabela_usuario()

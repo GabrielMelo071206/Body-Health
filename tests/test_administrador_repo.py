@@ -19,8 +19,15 @@ class TestAdministradorRepo:
         assert administrador_db is not None, "O usuário inserido não deve ser None"
         assert administrador_db.id == id_inserido, "O ID do profissional não confere"
         assert administrador_db.master == administrador_exemplo.master, "O nome não confere"
-
-
+        assert administrador_db.email == administrador_exemplo.email, "O email inserido não confere"
+        assert administrador_db.senha_hash == administrador_exemplo.senha_hash, "A senha inserida não confere"
+        assert administrador_db.data_nascimento == administrador_exemplo.data_nascimento, "A data inserida não confere"
+        assert administrador_db.sexo == administrador_exemplo.sexo, "O sexo inserido não confere"
+        assert administrador_db.tipo_usuario == administrador_exemplo.tipo_usuario, "O tipo de usuario inserido não confere"
+        
+              
+    
+    
     def test_obter_administrador_por_id_existente(self, test_db, administrador_exemplo):
         usuario_repo.criar_tabela_usuario()
         criar_tabela_administrador()
@@ -60,7 +67,9 @@ class TestAdministradorRepo:
         administrador_inserido.email = "atualizado@example.com"
         administrador_inserido.sexo = "Feminino"
         administrador_inserido.tipo_usuario = "administrador"
-
+        administrador_inserido.data_nascimento = "2000-01-15"
+        administrador_inserido.senha_hash = "senha_super_segura_123"
+        
         resultado = alterar_administrador(administrador_inserido)
         
         assert resultado is True, "Atualização deveria retornar True"
@@ -72,6 +81,9 @@ class TestAdministradorRepo:
         assert administrador_atualizado.sexo == "Feminino", "Sexo não atualizado"
         assert administrador_atualizado.tipo_usuario == "administrador", "Tipo usuário não atualizado"
         assert administrador_atualizado.master == administrador_exemplo.master, "Master não atualizado"
+        assert administrador_atualizado.data_nascimento == administrador_exemplo.data_nascimento, "Data de nascimento não atualizada"
+        assert administrador_atualizado.senha_hash == administrador_exemplo.senha_hash, "Senha  não atualizada"
+        
 
 
     def test_atualizar_administrador_inexistente(self, test_db, administrador_exemplo):
