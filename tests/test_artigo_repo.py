@@ -34,6 +34,10 @@ class TestArtigoRepo:
         assert artigo_db.id_artigo == id_artigo
         assert artigo_db.titulo == artigo.titulo
         assert artigo_db.conteudo == artigo.conteudo
+        assert artigo_db.data_publicacao == artigo.data_publicacao
+        assert artigo_db.visualizacoes == artigo.visualizacoes
+        assert artigo_db.ativo == artigo.ativo
+        assert artigo_db.avaliacao == artigo.avaliacao
 
     def test_alterar_artigo(self, test_db, profissional_exemplo):
         criar_tabela_usuario()
@@ -60,7 +64,10 @@ class TestArtigoRepo:
         artigo.conteudo = "Novo conteúdo"
         artigo.visualizacoes = 50
         artigo.avaliacao = 4.8
+        artigo.ativo = True
+        artigo.data_publicacao ="2025-07-01"
         resultado = alterar_artigo(artigo)
+
 
         artigo_alterado = obter_artigo_por_id(id_artigo)
 
@@ -69,7 +76,9 @@ class TestArtigoRepo:
         assert artigo_alterado.conteudo == "Novo conteúdo"
         assert artigo_alterado.visualizacoes == 50
         assert artigo_alterado.avaliacao == 4.8
-
+        assert artigo_alterado.ativo == True
+        assert artigo_alterado.data_publicacao =="2025-07-01"
+    
     def test_excluir_artigo(self, test_db, profissional_exemplo):
         criar_tabela_usuario()
         criar_tabela_profissional()

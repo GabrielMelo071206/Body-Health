@@ -93,6 +93,11 @@ class TestClienteRepo:
         assert resultado is True, "A operação de alterar deveria retornar True"
         assert cliente_alterado_db.nome == "Cliente Alterado", "O nome não foi alterado corretamente"
         assert cliente_alterado_db.tipo_conta == "premium", "O tipo de conta não foi alterado corretamente"
+        assert cliente_alterado_db.email == "exemplo@teste.com", "O email não foi alterado corretamente"  
+        assert cliente_alterado_db.senha_hash == "senha_super_segura_123", "A senha não foi alterada corretamente"  
+        assert cliente_alterado_db.sexo == "F", "O sexo não foi alterado corretamente"
+        assert cliente_alterado_db.tipo_usuario == "cliente", "O tipo de usuário não foi alterado corretamente"
+
 
     def test_alterar_cliente_inexistente(self, test_db, cliente_exemplo):
         criar_tabela_usuario()

@@ -5,6 +5,8 @@ from data.repo.profissional_repo import criar_tabela_profissional, inserir_profi
 from data.repo.administrador_repo import criar_tabela_administrador, inserir_administrador
 from data.repo.denuncia_repo import *
 from data.sql import denuncia_sql
+from tests.conftest import administrador_exemplo, denuncia_exemplo, profissional_exemplo, usuario_exemplo
+
 
 class TestDenunciaRepo:
 
@@ -12,38 +14,80 @@ class TestDenunciaRepo:
         resultado = criar_tabela_denuncia()
         assert resultado is True, "Tabela de denúncia não foi criada corretamente"
 
-    def test_inserir_denuncia(self, test_db, denuncia_exemplo):
+    
+    def test_inserir_denuncia(self,test_db,usuario_exemplo,profissional_exemplo,administrador_exemplo,denuncia_exemplo):
         criar_tabela_usuario()
         criar_tabela_profissional()
         criar_tabela_administrador()
         criar_tabela_denuncia()
 
+        id_usuario = inserir_usuario(usuario_exemplo)
+        id_profissional = inserir_profissional(profissional_exemplo)
+        id_admin = inserir_administrador(administrador_exemplo)
+
+        denuncia_exemplo.id_denunciante = id_usuario
+        denuncia_exemplo.id_denunciado = id_profissional
+        denuncia_exemplo.id_admin_avaliador = id_admin
+
         id = inserir_denuncia(denuncia_exemplo)
         assert id is not None, "ID da denúncia inserida não pode ser None"
+
         denuncia_db = obter_denuncia_por_id(id)
         assert denuncia_db is not None, "Denúncia não encontrada após inserção"
-        assert denuncia_db.motivo == denuncia_exemplo.motivo, "Motivo não confere"
+        assert denuncia_db.status == "pendente", "Status não foi atualizado"
+        assert denuncia_db.observacoes_admin == "Aguardando análise", "Observações não atualizadas"
+        assert denuncia_db.id_denunciante == id_usuario, "ID do denunciante não corresponde"
+        assert denuncia_db.id_denunciado == id_profissional, "ID do denunciado não corresponde"
+        assert denuncia_db.tipo_denunciante == "cliente", "Tipo de denunciante incorreto"
+        assert denuncia_db.tipo_denunciado == "nutricionista", "Tipo de denunciado incorreto"
+        assert denuncia_db.motivo == "Conteúdo impróprio", "Motivo incorreto"
+        assert denuncia_db.descricao == "O profissional compartilhou conteúdo inadequado no artigo.", "Descrição incorreta"
+        assert denuncia_db.data_denuncia[:10] == datetime.now().strftime('%Y-%m-%d'), "Data da denúncia incorreta"
+        assert denuncia_db.id_admin_avaliador == id_admin, "ID do admin avaliador não corresponde"
+        assert denuncia_db.ativo == 1, "Denúncia deve estar ativa"
 
+    
     def test_obter_denuncia_por_id_inexistente(self, test_db):
         criar_tabela_denuncia()
         denuncia = obter_denuncia_por_id(999)
         assert denuncia is None, "Deveria retornar None para denúncia inexistente"
 
-    def test_alterar_denuncia(self, test_db, denuncia_exemplo):
+    def test_alterar_denuncia(self, test_db, usuario_exemplo, profissional_exemplo, administrador_exemplo, denuncia_exemplo):
         criar_tabela_usuario()
         criar_tabela_profissional()
         criar_tabela_administrador()
         criar_tabela_denuncia()
 
+        id_usuario = inserir_usuario(usuario_exemplo)
+        id_profissional = inserir_profissional(profissional_exemplo)
+        id_admin = inserir_administrador(administrador_exemplo)
+
+        denuncia_exemplo.id_denunciante = id_usuario
+        denuncia_exemplo.id_denunciado = id_profissional
+        denuncia_exemplo.id_admin_avaliador = id_admin
+
         id = inserir_denuncia(denuncia_exemplo)
+
         denuncia = obter_denuncia_por_id(id)
         denuncia.status = "avaliada"
         denuncia.observacoes_admin = "Denúncia foi avaliada e arquivada"
+
         resultado = alterar_denuncia(denuncia)
         denuncia_atualizada = obter_denuncia_por_id(id)
+
         assert resultado is True, "Alteração deveria retornar True"
         assert denuncia_atualizada.status == "avaliada", "Status não foi atualizado"
         assert denuncia_atualizada.observacoes_admin == "Denúncia foi avaliada e arquivada", "Observações não atualizadas"
+        assert denuncia_atualizada.id_denunciante == id_usuario, "ID do denunciante não corresponde"
+        assert denuncia_atualizada.id_denunciado == id_profissional, "ID do denunciado não corresponde"
+        assert denuncia_atualizada.tipo_denunciante == "cliente", "Tipo de denunciante incorreto"
+        assert denuncia_atualizada.tipo_denunciado == "nutricionista", "Tipo de denunciado incorreto"
+        assert denuncia_atualizada.motivo == "Conteúdo impróprio", "Motivo incorreto"
+        assert denuncia_atualizada.descricao == "O profissional compartilhou conteúdo inadequado no artigo.", "Descrição incorreta"
+        assert denuncia_atualizada.data_denuncia[:10] == datetime.now().strftime('%Y-%m-%d'), "Data da denúncia incorreta"
+        assert denuncia_atualizada.id_admin_avaliador == id_admin, "ID do admin avaliador não corresponde"
+        assert bool(denuncia_atualizada.ativo) is True, "Denúncia deve estar ativa"
+
 
     def test_excluir_denuncia(self, test_db, denuncia_exemplo):
         criar_tabela_usuario()
