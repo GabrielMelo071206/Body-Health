@@ -22,8 +22,7 @@ from data.models.denuncia_model import Denuncia
 from datetime import datetime
 from data.models.avaliacao_artigo_model import AvaliacaoArtigo
 from data.models.visualizacao_artigo_model import VisualizacaoArtigo
-
-
+from data.models.assinatura_model import *  
 @pytest.fixture
 def avaliacao_artigo_exemplo(usuario_exemplo, artigo_exemplo) -> AvaliacaoArtigo:
     """Fixture para uma avaliação de artigo feita por um usuário."""
@@ -72,6 +71,21 @@ def usuario_exemplo() -> Usuario:
         data_nascimento="2000-01-15",
         sexo="F",
         tipo_usuario="cliente"
+    )
+
+
+@pytest.fixture
+def assinatura_exemplo(cliente_exemplo, plano_exemplo) -> Assinaturas:
+    """Objeto padrão de assinatura para uso em testes."""
+    return Assinaturas(
+        id_assinatura=0,
+        id_cliente=cliente_exemplo.id,
+        id_plano=plano_exemplo.id_plano,
+        data_inicio=date(2024, 1, 1),
+        data_fim=date(2024, 1, 31),
+        status="ativa",
+        valor_pago=49.90,
+        ativo=True
     )
 
 
@@ -284,4 +298,18 @@ def visualizacao_artigo_exemplo(usuario_exemplo, artigo_exemplo) -> Visualizacao
         mes_referencia=data_visualizacao.month,
         ano_referencia=data_visualizacao.year,
         Ativo=True
+    )
+
+@pytest.fixture
+def assinatura_exemplo(cliente_exemplo, plano_exemplo) -> Assinaturas:
+    """Objeto padrão de assinatura para uso em testes."""
+    return Assinaturas(
+        id_assinatura=0,                 # Id fictício, normalmente criado no banco
+        id_cliente=cliente_exemplo.id,  # Usa fixture cliente_exemplo
+        id_plano=plano_exemplo.id_plano, # Usa fixture plano_exemplo
+        data_inicio=date(2024, 1, 1),
+        data_fim=date(2024, 1, 31),
+        status="ativa",
+        valor_pago=49.90,
+        ativo=True
     )
