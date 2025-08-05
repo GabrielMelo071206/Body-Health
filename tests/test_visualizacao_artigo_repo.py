@@ -12,6 +12,10 @@ class Test_visualizacao_artigo_repo:
         resultado = criar_tabela_visualizacao_artigo()
         assert resultado is True
 
+    def test_inserir_visualizacao_artigo(self, test_db, usuario_exemplo, profissional_exemplo, artigo_exemplo):
+    
+    
+    
     def obter_visualizacao_artigo_por_id(id_visualizacao: int) -> Optional[VisualizacaoArtigo]:
         with get_connection() as conn:
             cursor = conn.cursor()
@@ -60,7 +64,10 @@ class Test_visualizacao_artigo_repo:
         visualizacao_editada.mes_referencia = 8
         visualizacao_editada.ano_referencia = 2026
         visualizacao_editada.Ativo = False
-
+        visualizacao_editada.id_visualizacao = id_visualizacao  # Necessário para a atualização
+        visualizacao_editada.id_artigo = id_artigo  # Necessário para a atualização
+        visualizacao_editada.id_usuario = id_usuario  # Necessário para a atualização
+        visualizacao_editada.Data_visualizacao = date.today()  # Necessário para a atualização
         # Alterar
         sucesso = alterar_visualizacao_artigo(visualizacao_editada)
         assert sucesso is True
@@ -71,7 +78,11 @@ class Test_visualizacao_artigo_repo:
         assert atualizado.mes_referencia == 8
         assert atualizado.ano_referencia == 2026
         assert atualizado.Ativo is False
-
+        assert atualizado.id_artigo == id_artigo
+        assert atualizado.id_usuario == id_usuario
+        assert atualizado.Data_visualizacao == date.today()
+        assert atualizado.id_visualizacao == id_visualizacao, "ID da visualização alterada não confere"
+        
 
     def test_excluir_visualizacao_artigo(self, test_db, visualizacao_artigo_exemplo, usuario_exemplo, profissional_exemplo, artigo_exemplo):
         criar_tabela_usuario()

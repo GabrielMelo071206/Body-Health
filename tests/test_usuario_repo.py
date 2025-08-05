@@ -41,11 +41,22 @@ class TestUsuarioRepo:
         # Act: Altera o nome e o tipo do usuário
         usuario_para_alterar.nome = "Nome Alterado"
         usuario_para_alterar.tipo_usuario = "cliente"
+        usuario_para_alterar.id = id_inserido
+        usuario_para_alterar.email = "usuario@teste.com"
+        usuario_para_alterar.senha_hash = "senha_super_segura_123"
+        usuario_para_alterar.data_nascimento = "1990-01-01"
+        usuario_para_alterar.sexo = "M"
+
         resultado = usuario_repo.alterar_usuario(usuario_para_alterar)
         usuario_alterado_db = usuario_repo.obter_usuario_por_id(id_inserido)
         # Assert
         assert resultado is True
         assert usuario_alterado_db.nome == "Nome Alterado"
+        assert usuario_alterado_db.tipo_usuario == "cliente"
+        assert usuario_alterado_db.email == "usuario@teste.com"
+        assert usuario_alterado_db.senha_hash == "senha_super_segura_123"
+        assert usuario_alterado_db.data_nascimento == "1990-01-01"
+        assert usuario_alterado_db.sexo == "M"
 
     def test_atualizar_senha_existente(self, test_db, usuario_exemplo):
         usuario_repo.criar_tabela_usuario()  # <-- necessário!

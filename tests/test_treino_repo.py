@@ -42,7 +42,15 @@ class TestTreinoRepo:
         assert treino_db.tipo_treino == "Hipertrofia"
         assert treino_db.ativo is True
         assert treino_db.visibilidade == "Privado"
-
+        assert treino_db.id_cliente == id_cliente
+        assert treino_db.id_profissional == id_profissional
+        from datetime import datetime
+        assert datetime.strptime(treino_db.data_inicio, "%Y-%m-%d").date() == date(2025, 7, 1)
+        assert datetime.strptime(treino_db.data_fim, "%Y-%m-%d").date() == date(2025, 7, 31)
+        assert treino_db.especificacoes == ""
+        assert treino_db.descricao == "Descrição do treino teste"
+        assert treino_db.id_treino == id_treino, "ID do treino inserido não confere"
+        
     def test_obter_treinos_por_cliente(self, test_db, cliente_exemplo, profissional_exemplo):
         usuario_repo.criar_tabela_usuario()
         cliente_repo.criar_tabela_cliente()
@@ -131,7 +139,17 @@ class TestTreinoRepo:
         treino_editado.nome = "Treino Alterado"
         treino_editado.tipo_treino = "Força"
         treino_editado.visibilidade = "Publico"
-
+        treino_editado.id_cliente = id_cliente
+        treino_editado.id_profissional = id_profissional
+        treino_editado.data_inicio = date(2025, 7, 2)
+        treino_editado.data_fim = date(2025, 7, 20)
+        treino_editado.especificacoes = "Alterações feitas"
+        treino_editado.descricao = "Descrição atualizada"
+        treino_editado.id_treino = id_treino
+        treino_editado.ativo = True
+        
+        
+        
         resultado = treino_repo.alterar_treino(treino_editado)
         assert resultado is True
 
@@ -139,6 +157,15 @@ class TestTreinoRepo:
         assert treino_novo.nome == "Treino Alterado"
         assert treino_novo.tipo_treino == "Força"
         assert treino_novo.visibilidade == "Publico"
+        assert treino_novo.id_cliente == id_cliente
+        assert treino_novo.id_profissional == id_profissional
+        from datetime import datetime
+        assert datetime.strptime(treino_novo.data_inicio, "%Y-%m-%d").date() == date(2025, 7, 2)
+        assert datetime.strptime(treino_novo.data_fim, "%Y-%m-%d").date() == date(2025, 7, 20)
+        assert treino_novo.especificacoes == "Alterações feitas"
+        assert treino_novo.descricao == "Descrição atualizada"
+        assert treino_novo.id_treino == id_treino, "ID do treino alterado não confere"
+        assert treino_novo.ativo is True, "O treino deve estar ativo após a alteração"
 
     def test_excluir_treino(self, test_db, cliente_exemplo, profissional_exemplo):
         usuario_repo.criar_tabela_usuario()

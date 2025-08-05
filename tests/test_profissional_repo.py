@@ -21,7 +21,14 @@ class TestProfissionalRepo:
         assert profissional_db.id == id_inserido, "O ID do profissional não confere"
         assert profissional_db.nome == nutricionista_exemplo.nome, "O nome não confere"
         assert profissional_db.tipo_usuario == nutricionista_exemplo.tipo_usuario, "O tipo de profissional não confere"
-
+        assert profissional_db.email == nutricionista_exemplo.email, "O email do profissional não confere"
+        assert profissional_db.senha_hash == nutricionista_exemplo.senha_hash, "A senha do profissional não confere"     
+        assert profissional_db.data_nascimento == nutricionista_exemplo.data_nascimento, "A data de nascimento do profissional não confere"   
+        assert profissional_db.sexo == nutricionista_exemplo.sexo, "O sexo do profissional não confere"  
+        assert profissional_db.ativo == nutricionista_exemplo.ativo, "O status ativo do profissional não confere"
+        assert profissional_db.ano_formacao == nutricionista_exemplo.ano_formacao, "O ano de formação do profissional não confere"    
+        assert profissional_db.registro_profissional == nutricionista_exemplo.registro_profissional, "O registro profissional do profissional não confere"    
+    
     def test_obter_profissional_por_id_existente(self, test_db, nutricionista_exemplo):
         criar_tabela_profissional()
         criar_tabela_usuario()
@@ -47,12 +54,19 @@ class TestProfissionalRepo:
         assert profissional_db.id == id_inserido, "O ID do profissional não confere"
         assert profissional_db.nome == nutricionista_exemplo.nome, "O nome não confere"
         assert profissional_db.tipo_usuario == nutricionista_exemplo.tipo_usuario, "O tipo de profissional não confere"
-
+        
         # Act
         profissional_db.nome = "Dra. Exemplo Alterada"
         profissional_db.ano_formacao = "inativo"
         profissional_db.registro_profissional = "123456-G/DF"
         profissional_db.ativo = False  # Alterando o status para inativo
+        profissional_db.tipo_usuario = "nutricionista"  # Mantendo o tipo de profissional
+        profissional_db.email = "nutri@teste.com"
+        profissional_db.senha_hash = "senha_nutri_123"
+        profissional_db.data_nascimento = "1990-01-01"
+        profissional_db.sexo = "Feminino"
+        
+        
         resultado = alterar_profissional(profissional_db)
         profissional_alterado_db = obter_profissional_por_id(id_inserido)
 
@@ -61,7 +75,15 @@ class TestProfissionalRepo:
         assert profissional_alterado_db.nome == "Dra. Exemplo Alterada", "O nome não foi alterado corretamente"
         assert profissional_alterado_db.ano_formacao == "inativo", "O ano de formação não foi alterado corretamente"
         assert profissional_alterado_db.registro_profissional == "123456-G/DF", "O registro profissional não foi alterado corretamente"
-
+        assert profissional_alterado_db.ativo == False, "O status ativo do profissional não foi alterado corretamente"
+        assert profissional_alterado_db.tipo_usuario == "nutricionista", "O tipo de profissional não foi alterado corretamente"
+        assert profissional_alterado_db.email == "nutri@teste.com", "O email do profissional não foi alterado corretamente"   
+        assert profissional_alterado_db.senha_hash == "senha_super_segura_123", "A senha do profissional não foi alterada corretamente"
+        assert profissional_alterado_db.data_nascimento == "1990-01-01", "A data de nascimento do profissional não foi alterada corretamente"
+        assert profissional_alterado_db.sexo == "Feminino", "O sexo do profissional não foi alterado corretamente"
+        assert profissional_alterado_db.id == id_inserido, "O ID do profissional não deveria ter sido alterado"    
+    
+    
     def test_alterar_profissional_inexistente(self, test_db, nutricionista_exemplo):
         criar_tabela_usuario()
         criar_tabela_profissional()        

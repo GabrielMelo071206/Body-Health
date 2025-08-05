@@ -80,7 +80,7 @@ class TestAssinaturaRepo:
         assinatura.status = "cancelada"
         assinatura.valor_pago = 0.0
         resultado = alterar_assinatura(assinatura)
-
+        
         assinatura_alterada = obter_assinatura_por_id(id_assinatura)
 
         assert resultado is True

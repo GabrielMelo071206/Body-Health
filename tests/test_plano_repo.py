@@ -106,15 +106,25 @@ class TestPlanoRepo:
         plano_para_alterar.tipo_plano = "anual"
         plano_para_alterar.valor = 499.90
         plano_para_alterar.duracao = 365
+        plano_para_alterar.data_inicio = date(2024, 1, 1)
+        plano_para_alterar.data_fim = date(2024, 1, 31)
+        plano_para_alterar.ativo = True
+        plano_para_alterar.id_plano = id_plano
+        
         resultado = alterar_plano(plano_para_alterar)
         plano_alterado_db = obter_plano_por_id(id_plano)
-
+        
+        
         # Assert
+        
         assert resultado is True, "A operação de alterar deveria retornar True"
         assert plano_alterado_db.tipo_plano == "anual", "O tipo de plano não foi alterado corretamente"
         assert plano_alterado_db.valor == 499.90, "O valor não foi alterado corretamente"
         assert plano_alterado_db.duracao == 365, "A duração não foi alterada corretamente"
-
+        assert plano_alterado_db.data_inicio == date(2024, 1, 1), "A data de início não foi alterada corretamente"
+        assert plano_alterado_db.data_fim == date(2024, 1, 31), "A data de fim não foi alterada corretamente"
+        assert plano_alterado_db.ativo == True, "O status ativo não foi alterado corretamente"
+       
     def test_alterar_plano_inexistente(self, test_db, plano_exemplo):
         criar_tabela_usuario()
         criar_tabela_cliente()
