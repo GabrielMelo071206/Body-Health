@@ -86,7 +86,22 @@ class TestAssinaturaRepo:
         assert resultado is True
         assert assinatura_alterada.status == "cancelada"
         assert assinatura_alterada.valor_pago == 0.0
-
+        assert assinatura_alterada.data_inicio == date(2024, 1, 1)
+        assert assinatura_alterada.data_fim == date(2024, 1, 31)
+        assert assinatura_alterada.ativo is True
+        assert assinatura_alterada.id_cliente == id_cliente
+        assert assinatura_alterada.id_plano == id_plano 
+        assert assinatura_alterada.id_assinatura == id_assinatura
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
     def test_excluir_assinatura(self, test_db, cliente_exemplo, plano_exemplo):
         criar_tabela_usuario()
         criar_tabela_cliente()

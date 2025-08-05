@@ -4,6 +4,8 @@ from data.repo.profissional_repo import criar_tabela_profissional, inserir_profi
 from data.repo.artigo_repo import criar_tabela_artigo, inserir_artigo
 from data.models.visualizacao_artigo_model import VisualizacaoArtigo
 from datetime import date
+from datetime import date, datetime
+from data.models.visualizacao_artigo_model import VisualizacaoArtigo
 
 
 class Test_visualizacao_artigo_repo:
@@ -12,8 +14,53 @@ class Test_visualizacao_artigo_repo:
         resultado = criar_tabela_visualizacao_artigo()
         assert resultado is True
 
+
+
     def test_inserir_visualizacao_artigo(self, test_db, usuario_exemplo, profissional_exemplo, artigo_exemplo):
-    
+        criar_tabela_usuario()
+        criar_tabela_profissional()
+        criar_tabela_artigo()
+        criar_tabela_visualizacao_artigo()
+
+        # Inserções e atualização dos objetos com os IDs reais
+        id_usuario = inserir_usuario(usuario_exemplo)
+        usuario_exemplo.id = id_usuario  # <- IMPORTANTE!
+
+        id_prof = inserir_profissional(profissional_exemplo)
+        artigo_exemplo.id_profissional = id_prof
+
+        id_artigo = inserir_artigo(artigo_exemplo)
+        artigo_exemplo.id_artigo = id_artigo  # <- IMPORTANTE!
+
+        # Criação da visualização com os IDs reais
+        visualizacao = VisualizacaoArtigo(
+            id_visualizacao=0,  # Ou None, se seu modelo permitir
+            id_artigo=artigo_exemplo.id_artigo,
+            id_usuario=usuario_exemplo.id,
+            Data_visualizacao=date.today(),
+            mes_referencia=date.today().month,
+            ano_referencia=date.today().year,
+            Ativo=True
+        )
+
+        # Inserção no banco
+        id_visualizacao = inserir_visualizacao_artigo(visualizacao)
+        assert isinstance(id_visualizacao, int)
+
+        # Recuperação e validação
+        resultado = obter_visualizacao_artigo_por_id(id_visualizacao)
+        assert resultado is not None
+        assert resultado.id_visualizacao == id_visualizacao
+        assert resultado.id_usuario == id_usuario
+        assert resultado.id_artigo == id_artigo
+        assert resultado.Ativo is True
+
+        # Comparar data
+        data_convertida = datetime.strptime(str(resultado.Data_visualizacao), "%Y-%m-%d").date()
+        assert data_convertida == date.today(), "A data de visualização não corresponde à data atual"
+        assert resultado.mes_referencia == date.today().month
+        assert resultado.ano_referencia == date.today().year
+
     
     
     def obter_visualizacao_artigo_por_id(id_visualizacao: int) -> Optional[VisualizacaoArtigo]:
@@ -23,15 +70,43 @@ class Test_visualizacao_artigo_repo:
             row = cursor.fetchone()
             if row is None:
                 return None
+            # Convert Data_visualizacao to date if it's a string
+            data_visualizacao = row["data_visualizacao"]
+            if isinstance(data_visualizacao, str):
+                from datetime import datetime
+                data_visualizacao = datetime.strptime(data_visualizacao, "%Y-%m-%d").date()
             return VisualizacaoArtigo(
                 id_visualizacao=row["id_visualizacao"],
                 id_artigo=row["id_artigo"],
                 id_usuario=row["id_usuario"],
-                Data_visualizacao=row["data_visualizacao"],
+                Data_visualizacao=data_visualizacao,
                 mes_referencia=row["mes_referencia"],
                 ano_referencia=row["ano_referencia"],
                 Ativo=bool(row["ativo"])
             )
+
+
+    def test_excluir_visualizacao_artigo(self, test_db, visualizacao_artigo_exemplo, usuario_exemplo, profissional_exemplo, artigo_exemplo):
+        criar_tabela_usuario()
+        criar_tabela_profissional()
+        criar_tabela_artigo()
+        criar_tabela_visualizacao_artigo()
+
+        id_usuario = inserir_usuario(usuario_exemplo)
+        id_profissional = inserir_profissional(profissional_exemplo)
+        artigo_exemplo.id_profissional = id_profissional
+        id_artigo = inserir_artigo(artigo_exemplo)
+
+        visualizacao = VisualizacaoArtigo(
+            0, id_artigo, id_usuario, date.today(), 7, 2025, True
+        )
+        id_visualizacao = inserir_visualizacao_artigo(visualizacao)
+
+        sucesso = excluir_visualizacao_artigo(id_visualizacao)
+        assert sucesso is True
+
+        resultado = obter_visualizacao_artigo_por_id(id_visualizacao)
+        assert resultado is None
 
     def test_alterar_visualizacao_artigo(self, test_db, usuario_exemplo, profissional_exemplo, artigo_exemplo):
         criar_tabela_usuario()
@@ -68,6 +143,7 @@ class Test_visualizacao_artigo_repo:
         visualizacao_editada.id_artigo = id_artigo  # Necessário para a atualização
         visualizacao_editada.id_usuario = id_usuario  # Necessário para a atualização
         visualizacao_editada.Data_visualizacao = date.today()  # Necessário para a atualização
+
         # Alterar
         sucesso = alterar_visualizacao_artigo(visualizacao_editada)
         assert sucesso is True
@@ -80,31 +156,15 @@ class Test_visualizacao_artigo_repo:
         assert atualizado.Ativo is False
         assert atualizado.id_artigo == id_artigo
         assert atualizado.id_usuario == id_usuario
-        assert atualizado.Data_visualizacao == date.today()
-        assert atualizado.id_visualizacao == id_visualizacao, "ID da visualização alterada não confere"
-        
 
-    def test_excluir_visualizacao_artigo(self, test_db, visualizacao_artigo_exemplo, usuario_exemplo, profissional_exemplo, artigo_exemplo):
-        criar_tabela_usuario()
-        criar_tabela_profissional()
-        criar_tabela_artigo()
-        criar_tabela_visualizacao_artigo()
+        # Converter Data_visualizacao string para date, se necessário
+        data_visualizacao = atualizado.Data_visualizacao
+        if isinstance(data_visualizacao, str):
+            data_visualizacao = datetime.strptime(data_visualizacao, "%Y-%m-%d").date()
 
-        id_usuario = inserir_usuario(usuario_exemplo)
-        id_profissional = inserir_profissional(profissional_exemplo)
-        artigo_exemplo.id_profissional = id_profissional
-        id_artigo = inserir_artigo(artigo_exemplo)
+        assert data_visualizacao == date.today()
+        assert atualizado.id_visualizacao == id_visualizacao, "ID da visualização alterada não coincide com o original"
 
-        visualizacao = VisualizacaoArtigo(
-            0, id_artigo, id_usuario, date.today(), 7, 2025, True
-        )
-        id_visualizacao = inserir_visualizacao_artigo(visualizacao)
-
-        sucesso = excluir_visualizacao_artigo(id_visualizacao)
-        assert sucesso is True
-
-        resultado = obter_visualizacao_artigo_por_id(id_visualizacao)
-        assert resultado is None
 
     def test_obter_visualizacoes_por_artigo(self, test_db, usuario_exemplo, profissional_exemplo, artigo_exemplo):
         criar_tabela_usuario()
