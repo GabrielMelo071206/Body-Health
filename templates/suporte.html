@@ -1,42 +1,6 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Suporte - Body Health</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/styles.css">
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="inicial.html"><img src="img/login.png" alt="" height="50px"> Body Health</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link text-white" aria-current="page" href="1.DashboardInicial.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white active" aria-current="page" href="6.Suporte.html">Suporte</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="4.Planos.html">Planos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="5.SobreNos.html">Sobre Nós</a>
-                    </li>
-                    <li>
-                        <li class="nav-item ms-lg-3"> <a href="2.Login.html" class="btn btn-outline-light">Login</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+{% extends 'layout.html' %}
 
+{% block content %}
     <div class="container mt-5">
         <h1 class="text-center mb-5 fw-bold text-primary">Central de Ajuda e Suporte</h1>
 
@@ -134,8 +98,5 @@
                 </div>
             </div>
         </div>
-
     </div>
-
-    </body>
-</html>
+{%endblock%}

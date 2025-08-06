@@ -1,46 +1,72 @@
+/* 1. Variáveis de Tema */
 :root {
-    /* Cores para o tema escuro - Consistente com as outras páginas */
     --dark-bg: #1a1a1a;
-    /* Fundo principal muito escuro */
     --dark-card-bg: #2b2b2b;
-    /* Fundo dos cards */
     --dark-text-color: #e0e0e0;
-    /* Cor de texto padrão clara (quase branca) */
     --dark-muted-text: #b0b0b0;
-    /* Texto muted mais claro */
     --dark-border-color: #444444;
-    /* Bordas mais escuras */
     --dark-shadow-color: rgba(0, 0, 0, 0.5);
-    /* Sombra mais intensa */
     --highlight-yellow: #ffc107;
-    /* Amarelo de destaque */
     --highlight-green: #28a745;
-    /* Verde para checks */
     --highlight-red: #dc3545;
-    /* Vermelho para X */
-
-    /* Cores para o banner claro (se quiser manter um elemento claro) */
     --light-banner-bg-start: #ffffff;
     --light-banner-bg-end: #eaeaea;
     --light-banner-text: #000000;
 }
 
+/* 2. Estilos Gerais e de Layout */
+
 body {
     background-color: var(--dark-bg);
     color: var(--dark-text-color);
     font-family: Arial, sans-serif;
-    padding-top: 70px;
-    /* Espaço para a navbar fixa */
+    padding-top: 0px;
 }
 
+body.login-register-page {
+    margin: 0;
+    padding: 0;
+    background-image: url("sua-imagem.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #000;
+    color: white;
+}
+
+.whatsapp-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    font-size: 28px;
+    color: #25D366;
+    background-color: white;
+    border-radius: 50%;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.logo {
+    height: 40px;
+}
+
+h1, h2, h3, h4, h5 {
+    color: var(--dark-text-color);
+}
+
+.text-primary { color: white !important; }
+.text-success { color: var(--highlight-green) !important; }
+.text-danger { color: var(--highlight-red) !important; }
+.text-muted { color: var(--dark-muted-text) !important; }
+.text-decoration-none { color: white !important; }
+
+/* 3. Navbar */
 .navbar {
     background-color: #212529 !important;
-    /* Cor da navbar consistente */
     box-shadow: 0 2px 4px var(--dark-shadow-color);
 }
 
-.navbar-brand,
-.navbar-nav .nav-link {
+.navbar-brand, .navbar-nav .nav-link {
     color: var(--dark-text-color) !important;
 }
 
@@ -58,20 +84,15 @@ body {
     color: var(--dark-bg);
 }
 
+/* 4. Componentes */
 .headline {
     text-align: center;
     font-size: 2.5rem;
-    /* Ajustado para um pouco maior */
     font-weight: bold;
-    margin-top: 3rem;
-    margin-bottom: 3rem;
-    /* Adicionado margem inferior */
+    margin: 3rem 0;
 }
 
-.headline span {
-    color: var(--highlight-yellow);
-    /* Usa a variável para o amarelo */
-}
+.headline span { color: var(--highlight-yellow); }
 
 .banner {
     display: flex;
@@ -83,41 +104,32 @@ body {
     max-width: 1200px;
     padding: 2rem;
     color: var(--light-banner-text);
-    /* Texto do banner em preto */
     align-items: center;
-    /* Alinha verticalmente no centro */
 }
 
-.banner-text {
+.banner-text, .banner-image {
     flex: 1 1 400px;
     padding: 1rem;
 }
 
-.banner-image {
-    flex: 1 1 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-}
-
-.banner-image img {
-    max-width: 100%;
-    border-radius: 10px;
-}
+.banner-image img { max-width: 100%; border-radius: 10px; }
 
 .carousel img {
     height: 400px;
     object-fit: cover;
     border-radius: 12px;
-    /* Adiciona borda arredondada ao carrossel */
+}
+
+.card-custom, .about-card, .support-card, .sidebar, .plan-details-card {
+    background-color: var(--dark-card-bg);
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 0 15px var(--dark-shadow-color);
+    margin-bottom: 20px;
 }
 
 .plans-section {
-    /* Renomeado de .planos para evitar conflito e clareza */
     background-color: var(--dark-card-bg);
-    /* Fundo escuro para a seção de planos */
-    color: var(--dark-text-color);
     padding: 2rem;
     border-radius: 20px;
     margin: 3rem auto;
@@ -125,870 +137,234 @@ body {
     box-shadow: 0 0 15px var(--dark-shadow-color);
 }
 
-.plans-section h2 {
-    /* Título da seção de planos */
-    color: white;
-    /* Cor do título principal da seção de planos */
-    margin-bottom: 2rem;
-    text-align: center;
-}
-
 .plan-card {
-    /* Renomeado de .plano para .plan-card para clareza */
     background-color: #3b3b3b;
-    /* Fundo dos cards de plano */
-    color: var(--dark-text-color);
     border-radius: 15px;
     padding: 25px;
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    /* Empurra o botão para baixo */
     min-width: 280px;
-    /* Garante que não fiquem muito estreitos */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     border: 1px solid var(--dark-border-color);
-    /* Borda sutil */
-}
-
-.plan-card h3 {
-    color: white;
-    margin-bottom: 1rem;
-}
-
-.plan-card p {
-    margin-bottom: 1rem;
-}
-
-.plan-card s {
-    color: var(--dark-muted-text);
-}
-
-.plan-card strong {
-    color: var(--highlight-yellow);
-    font-size: 1.2rem;
 }
 
 .plan-card-highlight {
-    /* Renomeado de .plano-destaque */
     background-color: #4f4f4f;
-    /* Um pouco mais escuro para destaque */
     border-color: var(--highlight-yellow);
-    /* Borda amarela */
     position: relative;
     box-shadow: 0 0 20px rgba(255, 193, 7, 0.4);
-    /* Sombra mais forte */
 }
 
 .plan-card-highlight::before {
     content: "💡 O mais vantajoso";
     position: absolute;
-    top: -15px;
-    /* Ajustado um pouco para cima */
-    left: 50%;
-    /* Centraliza */
-    transform: translateX(-50%);
-    /* Centraliza */
+    top: -15px; left: 50%; transform: translateX(-50%);
     background-color: var(--highlight-yellow);
-    color: #212529;
-    /* Texto escuro no badge */
-    padding: 5px 15px;
-    /* Ajustado padding */
-    border-radius: 20px;
-    /* Mais arredondado */
-    font-weight: bold;
-    font-size: 0.9rem;
-    white-space: nowrap;
-    /* Evita quebra de linha */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    color: #212529; padding: 5px 15px;
+    border-radius: 20px; font-weight: bold; font-size: 0.9rem;
+    white-space: nowrap; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .plan-card button {
     background-color: var(--highlight-yellow);
     color: #212529;
-    /* Texto preto no botão */
-    padding: 12px 25px;
-    /* Ajustado padding */
-    border: none;
-    border-radius: 8px;
-    /* Menos arredondado */
-    font-weight: bold;
-    margin-top: auto;
-    /* Empurra o botão para o final do card */
-    transition: background-color 0.3s ease;
-    width: 100%;
+    padding: 12px 25px; border: none; border-radius: 8px;
+    font-weight: bold; margin-top: auto;
+    transition: background-color 0.3s ease; width: 100%;
 }
 
-.plan-card button:hover {
-    background-color: #e6b000;
-}
-
-.plan-card ul {
-    margin-top: 15px;
-    padding-left: 0;
-    /* Remove padding padrão da lista */
-    list-style: none;
-    /* Remove bullet points */
-}
+.plan-card button:hover { background-color: #e6b000; }
+.plan-card ul { margin-top: 15px; padding-left: 0; list-style: none; }
 
 .plan-card ul li {
-    margin-bottom: 8px;
-    font-size: 0.95rem;
-    display: flex;
-    align-items: center;
-    color: var(--dark-text-color);
+    margin-bottom: 8px; font-size: 0.95rem;
+    display: flex; align-items: center; color: var(--dark-text-color);
 }
 
-.plan-card ul li i {
-    /* Para os ícones de check/x */
-    margin-right: 8px;
-    font-size: 1.1rem;
-}
+.plan-card ul li i { margin-right: 8px; font-size: 1.1rem; }
 
-/* Cores dos checks e X's */
-.plan-card ul li .bi-check-circle-fill {
-    color: var(--highlight-green);
-}
+.plan-card ul li .bi-check-circle-fill { color: var(--highlight-green); }
 
-.plan-card ul li .bi-x-circle-fill {
-    color: var(--highlight-red);
-}
+.plan-card ul li .bi-x-circle-fill { color: var(--highlight-red); }
 
 .plan-card ul li.disabled-feature {
-    /* Para os itens desabilitados no plano gratuito */
-    color: var(--dark-muted-text);
-    text-decoration: line-through;
+    color: var(--dark-muted-text); text-decoration: line-through;
 }
 
-.plan-card ul li.disabled-feature .bi-x-circle-fill {
-    color: var(--highlight-red);
-    /* Garante que o X continue vermelho */
+.plan-card ul li.disabled-feature .bi-x-circle-fill { color: var(--highlight-red); }
+
+.plan-card .price-info { margin-top: 1rem; }
+
+/* Formulários de Login/Cadastro */
+.login-box, .register-card {
+    max-width: 600px;
+    margin: 100px auto;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border-radius: 12px;
+    color: white;
+    text-align: center;
 }
 
-.plan-card .price-info {
-    /* Classe para o preço principal */
-    margin-top: 1rem;
+.login-box a, .register-card a { color: white; text-decoration: none; }
+
+.login-box a:hover, .register-card a:hover { text-decoration: underline; }
+
+.btn-login-custom, .btn-register-custom {
+    background-color: var(--highlight-yellow); color: #000;
+    border: none; width: 100%;
+    padding: 10px 15px; border-radius: 5px;
+    font-size: 1rem; font-weight: bold;
+    margin-top: 20px; display: block; line-height: 1.5;
 }
 
-:root {
---dark-shadow-color: rgba(0, 0, 0, 0.5);
+.btn-login-custom:hover, .btn-register-custom:hover {
+    background-color: #e0a800; color: #000;
 }
 
-body {
-margin: 0;
-padding: 0;
-background-image: url("sua-imagem.jpg"); /* Substitua pelo caminho correto da sua imagem de fundo */
-background-size: cover;
-background-position: center;
-background-repeat: no-repeat;
-font-family: Arial, sans-serif;
-background-color: #000;
-color: white;
-}
-
-.navbar {
-background-color: #212529 !important;
-box-shadow: 0 2px 4px var(--dark-shadow-color);
-}
-
-.navbar-nav .nav-link {
-color: white !important;
-margin-left: 20px;
-font-weight: 500;
-}
-
-.register-card {
-max-width: 600px; /* Largura do card de cadastro */
-margin: 100px auto;
-background-color: rgba(255, 255, 255, 0.1);
-backdrop-filter: blur(10px);
-padding: 30px;
-border-radius: 12px;
-color: white;
-text-align: center;
-}
-
-.register-card h2 {
-color: white;
-margin-bottom: 25px;
+.form-label {
+    color: var(--dark-text-color);
+    text-align: left; display: block; margin-bottom: 5px;
+    font-weight: bold;
 }
 
 .form-control, .form-select {
-background-color: rgba(255, 255, 255, 0.05);
-color: white;
-border: 1px solid #ccc;
-padding: 10px 15px; /* Padding padrão para inputs */
-height: auto; /* Garante que a altura seja flexível */
+    background-color: #3b3b3b;
+    color: var(--dark-text-color);
+    border: 1px solid var(--dark-border-color);
+    padding: 10px 15px; height: auto;
 }
 
-.form-control::placeholder {
-color: rgba(255, 255, 255, 0.5);
-}
-
-.form-label {
-color: white;
-text-align: left;
-display: block;
-margin-bottom: 5px;
-}
-
-/* ESTILO DO BOTÃO CADASTRAR - AJUSTADO PARA O MESMO TAMANHO DOS INPUTS */
-.btn-register-custom { /* Nova classe para o botão */
-background-color: #ffc107; /* Cor de fundo amarela */
-color: #000; /* Cor do texto preta */
-border: none;
-width: 100%; /* Ocupa 100% da largura do pai */
-padding: 10px 15px; /* Mesma altura e padding dos inputs para alinhar */
-border-radius: 5px;
-font-size: 1rem; /* Tamanho da fonte padrão para combinar com os inputs */
-font-weight: bold;
-margin-top: 20px;
-display: block; /* Garante que o botão seja um bloco para ocupar 100% */
-line-height: 1.5; /* Ajuste para o texto dentro do botão */
-}
-
-.btn-register-custom:hover {
-background-color: #e0a800; /* Um pouco mais escuro no hover */
-color: #000;
-}
-
-
-/* ESTILO DOS LINKS DENTRO DO CARD */
-.register-card a {
-color: white;
-text-decoration: none;
-}
-
-.register-card a:hover {
-text-decoration: underline;
-}
-
-.logo {
-height: 40px;
-}
-
-.whatsapp-icon {
-position: fixed;
-bottom: 20px;
-right: 20px;
-font-size: 28px;
-color: #25D366;
-background-color: white;
-border-radius: 50%;
-padding: 10px;
-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-}
-
-:root {
---dark-shadow-color: rgba(0, 0, 0, 0.5);
-}
-
-body {
-margin: 0;
-padding: 0;
-background-image: url("sua-imagem.jpg"); /* Substitua pelo caminho correto da sua imagem de fundo */
-background-size: cover;
-background-position: center;
-background-repeat: no-repeat;
-font-family: Arial, sans-serif;
-background-color: #000; /* Cor de fallback caso a imagem não carregue */
-color: white; /* Cor do texto padrão para o body */
-}
-
-.navbar {
-background-color: #212529 !important; /* Cor da navbar consistente */
-box-shadow: 0 2px 4px var(--dark-shadow-color); /* Usando a variável */
-}
-
-.navbar-nav .nav-link {
-color: white !important;
-margin-left: 20px;
-font-weight: 500;
-}
-
-.login-box {
-/* Ajustes de largura e posicionamento */
-max-width: 600px; /* Aumentado para consistência com o cadastro */
-margin: 100px auto; /* Centraliza vertical e horizontalmente */
-background-color: rgba(255, 255, 255, 0.1); /* Fundo branco transparente */
-backdrop-filter: blur(10px); /* Efeito de blur no fundo */
-padding: 30px;
-border-radius: 12px; /* Raio da borda consistente */
-color: white;
-text-align: center; /* Centraliza o título e o botão */
-}
-
-.login-box h4 {
-color: white; /* Título branco */
-margin-bottom: 25px;
-}
-
-.form-control {
-background-color: rgba(255, 255, 255, 0.05); /* Fundo branco bem transparente para os campos */
-color: white;
-border: 1px solid #ccc; /* Borda cinza clara */
-padding: 10px 15px; /* Padding padrão para inputs */
-height: auto; /* Garante que a altura seja flexível */
-}
-
-.form-control::placeholder {
-color: rgba(255, 255, 255, 0.5); /* Placeholder mais claro */
-}
-
-.form-label {
-color: white; /* Garante que os labels sejam brancos */
-text-align: left; /* Alinha labels à esquerda */
-display: block; /* Garante que labels ocupem a largura total para espaçamento */
-margin-bottom: 5px;
-}
-
-/* ESTILO DO BOTÃO DE LOGIN - AJUSTADO PARA O MESMO TAMANHO DOS INPUTS */
-.btn-login-custom { /* Nova classe para o botão de login */
-background-color: #ffc107; /* Cor de fundo amarela */
-color: #000; /* Cor do texto preta */
-border: none;
-width: 100%; /* Ocupa 100% da largura do pai */
-padding: 10px 15px; /* Mesma altura e padding dos inputs para alinhar */
-border-radius: 5px;
-font-size: 1rem; /* Tamanho da fonte padrão para combinar com os inputs */
-font-weight: bold;
-margin-top: 20px; /* Espaçamento superior */
-display: block; /* Garante que o botão seja um bloco para ocupar 100% */
-line-height: 1.5; /* Ajuste para o texto dentro do botão */
-}
-
-.btn-login-custom:hover {
-background-color: #e0a800; /* Um pouco mais escuro no hover */
-color: #000;
-}
-
-/* ESTILO DOS LINKS DENTRO DO CARD DE LOGIN */
-.login-box a {
-color: white; /* Links brancos */
-text-decoration: none;
-}
-
-.login-box a:hover {
-text-decoration: underline;
-}
-
-.logo {
-height: 40px;
-}
-
-/* Se você tiver um ícone de WhatsApp, mantenha aqui */
-.whatsapp-icon {
-position: fixed;
-bottom: 20px;
-right: 20px;
-font-size: 28px;
-color: #25D366;
-background-color: white;
-border-radius: 50%;
-padding: 10px;
-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-}
-
-:root {
-/* Cores para o tema escuro */
---dark-bg: #1a1a1a;
---dark-card-bg: #2b2b2b;
---dark-text-color: #e0e0e0;
---dark-muted-text: #b0b0b0;
---dark-border-color: #444444;
---dark-shadow-color: rgba(0,0,0,0.5);
---highlight-yellow: #ffc107;
---highlight-green: #28a745;
---highlight-red: #dc3545;
-}
-
-body {
-background-color: var(--dark-bg);
-color: var(--dark-text-color);
-padding-top: 70px;
-}
-.navbar {
-background-color: #212529 !important;
-box-shadow: 0 2px 4px var(--dark-shadow-color);
-}
-.navbar-brand, .navbar-nav .nav-link {
-color: var(--dark-text-color) !important;
-}
-.navbar-nav .nav-link.active {
-color: var(--highlight-yellow) !important;
-}
-
-h1, h3, h5, h4 {
-color: var(--dark-text-color);
-}
-.text-primary {
-color: white !important;
-}
-
-.card-custom {
-background-color: var(--dark-card-bg);
-border-radius: 8px;
-padding: 25px;
-box-shadow: 0 0 15px var(--dark-shadow-color);
-margin-bottom: 20px;
-}
-
-.form-label {
-color: var(--dark-text-color);
-}
-.form-control, .form-select {
-background-color: #3b3b3b;
-border: 1px solid var(--dark-border-color);
-color: var(--dark-text-color);
-}
 .form-control:focus, .form-select:focus {
-background-color: #4b4b4b;
-border-color: var(--highlight-yellow);
-box-shadow: 0 0 0 0.25rem rgba(255,193,7,0.25);
-color: var(--dark-text-color);
-}
-.form-control::placeholder {
-color: var(--dark-muted-text);
+    background-color: #4b4b4b;
+    border-color: var(--highlight-yellow);
+    box-shadow: 0 0 0 0.25rem rgba(255,193,7,0.25);
 }
 
-.btn-primary {
-background-color: #007bff;
-border-color: #007bff;
-color: #ffffff;
-}
-.btn-primary:hover {
-background-color: #0056b3;
-border-color: #0056b3;
-}
-.text-muted {
-color: var(--dark-muted-text) !important;
-}
-.list-group-item {
-background-color: transparent;
-border-color: var(--dark-border-color);
-color: var(--dark-text-color);
-}
-.list-group-item strong {
-color: white;
-}
-.text-success {
-color: var(--highlight-green) !important;
-}
+.form-control::placeholder { color: var(--dark-muted-text); }
 
-/* Estilos para abas de pagamento (Cartão/PIX) */
+/* Pagamento */
 .payment-tabs {
-display: flex;
-margin-bottom: 20px;
-border-bottom: 1px solid var(--dark-border-color);
+    display: flex; margin-bottom: 20px;
+    border-bottom: 1px solid var(--dark-border-color);
 }
+
 .payment-tab-button {
-flex-grow: 1;
-padding: 10px 15px;
-cursor: pointer;
-text-align: center;
-color: var(--dark-muted-text);
-font-weight: bold;
-border: none;
-background: transparent;
-border-bottom: 3px solid transparent;
-transition: all 0.3s ease;
+    flex-grow: 1; padding: 10px 15px; cursor: pointer;
+    text-align: center; color: var(--dark-muted-text);
+    font-weight: bold; border: none; background: transparent;
+    border-bottom: 3px solid transparent; transition: all 0.3s ease;
 }
+
 .payment-tab-button.active {
-color: var(--highlight-yellow);
-border-bottom: 3px solid var(--highlight-yellow);
+    color: var(--highlight-yellow);
+    border-bottom: 3px solid var(--highlight-yellow);
 }
-.payment-tab-button:hover:not(.active) {
-color: var(--dark-text-color);
-}
-.payment-content {
-display: none;
-}
-.payment-content.active {
-display: block;
-}
+
+.payment-tab-button:hover:not(.active) { color: var(--dark-text-color); }
+
+.payment-content { display: none; }
+
+.payment-content.active { display: block; }
 
 #pix-qr-code {
-width: 100%;
-max-width: 250px;
-height: auto;
-display: block;
-margin: 20px auto;
-border-radius: 8px;
+    width: 100%; max-width: 250px; height: auto;
+    display: block; margin: 20px auto; border-radius: 8px;
 }
-#pix-copy-button {
-background-color: var(--highlight-green);
-border-color: var(--highlight-green);
-}
-#pix-copy-button:hover {
-background-color: #218838;
-border-color: #1e7e34;
-}
-.pix-code-container {
-position: relative;
-}
-.pix-code-container input {
-padding-right: 50px; /* Space for the copy button */
-}
+
+.pix-code-container { position: relative; }
+
+.pix-code-container input { padding-right: 50px; }
+
 .pix-copy-btn-absolute {
-position: absolute;
-right: 10px;
-top: 50%;
-transform: translateY(-50%);
-background: none;
-border: none;
-color: var(--dark-muted-text);
-font-size: 1.2rem;
-}
-.pix-copy-btn-absolute:hover {
-color: var(--highlight-yellow);
+    position: absolute; right: 10px; top: 50%;
+    transform: translateY(-50%); background: none; border: none;
+    color: var(--dark-muted-text); font-size: 1.2rem;
 }
 
-:root {
-/* Cores para o tema escuro */
---dark-bg: #1a1a1a;
---dark-card-bg: #2b2b2b;
---dark-text-color: #e0e0e0;
---dark-muted-text: #b0b0b0;
---dark-border-color: #444444;
---dark-shadow-color: rgba(0,0,0,0.5);
---highlight-yellow: #ffc107;
---highlight-green: #28a745;
---highlight-red: #dc3545;
-}
+.pix-copy-btn-absolute:hover { color: var(--highlight-yellow); }
 
-body {
-background-color: var(--dark-bg);
-color: var(--dark-text-color);
-padding-top: 70px;
-}
-.navbar {
-background-color: #212529 !important;
-box-shadow: 0 2px 4px var(--dark-shadow-color);
-}
-.navbar-brand, .navbar-nav .nav-link {
-color: var(--dark-text-color) !important;
-}
-.navbar-nav .nav-link.active {
-color: var(--highlight-yellow) !important;
-}
+/* Abas de Planos */
+.plan-tabs { display: flex; justify-content: center; margin-bottom: 30px; gap: 10px; }
 
-h1, h3, h5 {
-color: var(--dark-text-color);
-}
-.text-primary {
-color: white !important;
-}
+.plan-tab-control { display: none; }
 
-/* Estilos para as abas */
-.plan-tabs {
-display: flex;
-justify-content: center;
-margin-bottom: 30px;
-gap: 10px;
-}
-/* Esconde os radio buttons */
-.plan-tab-control {
-display: none;
-}
-/* Estilo das labels que atuam como abas */
 .plan-tab-label {
-border: 1px solid var(--dark-border-color);
-border-radius: 0.25rem;
-padding: 12px 35px;
-font-weight: bold;
-background-color: var(--dark-card-bg);
-color: var(--dark-text-color);
-cursor: pointer;
-transition: all 0.3s ease;
-text-align: center;
-user-select: none;
+    border: 1px solid var(--dark-border-color); border-radius: 0.25rem;
+    padding: 12px 35px; font-weight: bold;
+    background-color: var(--dark-card-bg); color: var(--dark-text-color);
+    cursor: pointer; transition: all 0.3s ease; text-align: center; user-select: none;
 }
-.plan-tab-label:hover {
-background-color: #3b3b3b;
-color: #ffffff;
-}
-/* Estilo da aba ativa quando o rádio correspondente está checado */
+
+.plan-tab-label:hover { background-color: #3b3b3b; color: #ffffff; }
+
 .plan-tab-control:checked + .plan-tab-label {
-background-color: var(--highlight-yellow);
-color: #212529;
-border-color: var(--highlight-yellow);
-box-shadow: 0 0 10px rgba(255,193,7,0.3);
+    background-color: var(--highlight-yellow); color: #212529;
+    border-color: var(--highlight-yellow);
+    box-shadow: 0 0 10px rgba(255,193,7,0.3);
 }
 
-/* Conteúdo das abas - inicialmente todos escondidos */
-.tab-content-section {
-display: none;
-width: 100%;
+.tab-content-section { display: none; width: 100%; }
+
+.features i { font-size: 1.1rem; margin-right: 10px; color: var(--highlight-green); }
+
+.features .col-12, .features .col-md-6 { display: flex; align-items: center; margin-bottom: 10px; }
+
+.badge.bg-success { background-color: var(--highlight-green) !important; }
+
+/* Outros Componentes */
+.about-card, .support-card {
+    background-color: var(--dark-card-bg); border-radius: 8px;
+    padding: 30px; box-shadow: 0 0 15px var(--dark-shadow-color);
+    margin-bottom: 30px;
 }
 
-.features i {
-font-size: 1.1rem;
-margin-right: 10px;
-color: var(--highlight-green);
-}
-.features .col-12, .features .col-md-6 {
-display: flex;
-align-items: center;
-margin-bottom: 10px;
-}
-.text-danger {
-color: var(--highlight-red) !important;
+.about-card p, .support-card p, .support-card ul li {
+    font-size: 1.05rem; line-height: 1.7;
 }
 
-.sidebar, .plan-details-card {
-background-color: var(--dark-card-bg);
-border-radius: 8px;
-padding: 25px;
-box-shadow: 0 0 15px var(--dark-shadow-color);
-margin-bottom: 20px;
-}
-.plan-details-card h3 {
-color: white;
-}
-.plan-details-card p {
-color: var(--dark-text-color);
-font-size: 1.05rem;
-line-height: 1.6;
-}
-.form-check-label {
-color: var(--dark-text-color);
-}
-.form-check-label strong {
-color: #ffffff;
-}
-.text-success {
-color: var(--highlight-green) !important;
-}
-.badge.bg-success {
-background-color: var(--highlight-green) !important;
-}
+.about-card ul, .support-card ul { list-style: none; padding: 0; }
 
-.price-display {
-font-size: 2.2rem;
-font-weight: bold;
-color: white;
-margin-top: 15px;
-margin-bottom: 20px;
-text-align: center;
-}
-.btn-primary {
-background-color: #007bff;
-border-color: #007bff;
-color: #ffffff;
-}
-.btn-primary:hover {
-background-color: #0056b3;
-border-color: #0056b3;
-}
-.text-muted {
-color: var(--dark-muted-text) !important;
-}
-.text-decoration-none {
-color: white !important;
-}
+.about-card ul li, .support-card ul li { margin-bottom: 10px; }
 
-:root {
-/* Cores para o tema escuro */
---dark-bg: #1a1a1a; /* Fundo principal muito escuro */
---dark-card-bg: #2b2b2b; /* Fundo dos cards e sidebar */
---dark-text-color: #e0e0e0; /* Cor de texto padrão clara (quase branca) */
---dark-muted-text: #b0b0b0; /* Texto muted mais claro */
---dark-border-color: #444444; /* Bordas mais escuras */
---dark-shadow-color: rgba(0,0,0,0.5); /* Sombra mais intensa */
---highlight-yellow: #ffc107; /* Amarelo de destaque (pode ser ajustado) */
---highlight-green: #28a745; /* Verde para checks */
---highlight-red: #dc3545; /* Vermelho para X */
-}
+.about-card ul li i, .support-card ul li i { margin-right: 10px; color: var(--highlight-yellow); }
 
-body {
-background-color: var(--dark-bg);
-color: var(--dark-text-color); /* Texto padrão claro */
-padding-top: 70px; /* Espaço para a navbar fixa */
-}
-.navbar {
-background-color: #212529 !important; /* Bootstrap bg-dark é escuro, mas vamos garantir */
-box-shadow: 0 2px 4px var(--dark-shadow-color);
-}
-.navbar-brand, .navbar-nav .nav-link {
-color: var(--dark-text-color) !important;
-}
-.navbar-nav .nav-link.active {
-    color: var(--highlight-yellow) !important; /* Destaque para o link ativo */
-}
-
-h1, h2, h3, h5 {
-color: var(--dark-text-color); /* Títulos claros */
-}
-.text-primary { /* Para o título principal */
-color: white !important; /* Alterado para branco puro */
-}
-
-.about-card {
-background-color: var(--dark-card-bg);
-border-radius: 8px;
-padding: 30px;
-box-shadow: 0 0 15px var(--dark-shadow-color);
-margin-bottom: 30px;
-}
-.about-card p {
-font-size: 1.05rem;
-line-height: 1.7;
-margin-bottom: 20px;
-}
-.about-card ul {
-list-style: none;
-padding: 0;
-}
-.about-card ul li {
-margin-bottom: 10px;
-font-size: 1.0rem;
-}
-.about-card ul li i {
-margin-right: 10px;
-color: var(--highlight-yellow); /* Ícones de destaque */
-}
 .img-team {
-max-width: 100%;
-height: auto;
-border-radius: 8px;
-margin-top: 20px;
-box-shadow: 0 0 10px var(--dark-shadow-color);
-}
-.icon-large {
-font-size: 2.5rem;
-color: var(--highlight-yellow);
-margin-bottom: 15px;
-}
-:root {
-/* Cores para o tema escuro */
---dark-bg: #1a1a1a; /* Fundo principal muito escuro */
---dark-card-bg: #2b2b2b; /* Fundo dos cards e formulários */
---dark-text-color: #e0e0e0; /* Cor de texto padrão clara (quase branca) */
---dark-muted-text: #b0b0b0; /* Texto muted mais claro */
---dark-border-color: #444444; /* Bordas mais escuras */
---dark-shadow-color: rgba(0,0,0,0.5); /* Sombra mais intensa */
---highlight-yellow: #ffc107; /* Amarelo de destaque */
---highlight-green: #28a745; /* Verde para checks */
+    max-width: 100%; height: auto; border-radius: 8px;
+    margin-top: 20px; box-shadow: 0 0 10px var(--dark-shadow-color);
 }
 
-body {
-background-color: var(--dark-bg);
-color: var(--dark-text-color);
-padding-top: 70px; /* Espaço para a navbar fixa */
-}
-.navbar {
-background-color: #212529 !important;
-box-shadow: 0 2px 4px var(--dark-shadow-color);
-}
-.navbar-brand, .navbar-nav .nav-link {
-color: var(--dark-text-color) !important;
-}
-.navbar-nav .nav-link.active {
-    color: var(--highlight-yellow) !important;
-}
+.icon-large { font-size: 2.5rem; color: var(--highlight-yellow); margin-bottom: 15px; }
 
-h1, h2, h3, h5 {
-color: var(--dark-text-color);
-}
-.text-primary {
-color: white !important;
-}
-
-.support-card {
-background-color: var(--dark-card-bg);
-border-radius: 8px;
-padding: 30px;
-box-shadow: 0 0 15px var(--dark-shadow-color);
-margin-bottom: 30px;
-}
-.support-card p, .support-card ul li {
-font-size: 1.05rem;
-line-height: 1.7;
-}
-.support-card ul {
-list-style: none;
-padding: 0;
-}
-.support-card ul li {
-margin-bottom: 10px;
-}
-.support-card ul li i {
-margin-right: 10px;
-color: var(--highlight-yellow);
-}
-
-/* Estilo para o formulário de contato */
-.form-label {
-color: var(--dark-text-color);
-font-weight: bold;
-}
-.form-control, .form-control:focus {
-background-color: #3b3b3b;
-color: var(--dark-text-color);
-border: 1px solid var(--dark-border-color);
-}
-.form-control::placeholder {
-color: var(--dark-muted-text);
-}
-.form-control:focus {
-box-shadow: 0 0 0 0.25rem rgba(255,193,7,0.25); /* Sombra amarela no foco */
-border-color: var(--highlight-yellow);
-}
-.btn-primary {
-background-color: #007bff;
-border-color: #007bff;
-color: #ffffff;
-}
-.btn-primary:hover {
-background-color: #0056b3;
-border-color: #0056b3;
-}
-
-/* Estilo para a seção de FAQ (Acordeão básico sem JS) */
 .faq-item {
-margin-bottom: 15px;
-border: 1px solid var(--dark-border-color);
-border-radius: 8px;
-overflow: hidden; /* Garante que o overflow seja tratado */
+    margin-bottom: 15px; border: 1px solid var(--dark-border-color);
+    border-radius: 8px; overflow: hidden;
 }
 .faq-question {
-background-color: var(--dark-card-bg);
-padding: 15px 20px;
-cursor: pointer;
-font-weight: bold;
-color: var(--dark-text-color);
-display: block; /* Para o ícone de seta funcionar com :before */
-position: relative;
-user-select: none;
+    background-color: var(--dark-card-bg); padding: 15px 20px;
+    cursor: pointer; font-weight: bold; color: var(--dark-text-color);
+    display: block; position: relative; user-select: none;
 }
-.faq-question:hover {
-background-color: #3b3b3b;
-}
+.faq-question:hover { background-color: #3b3b3b; }
+
 .faq-answer {
-background-color: #323232; /* Um pouco mais claro que o card */
-padding: 0 20px;
-max-height: 0; /* Escondido por padrão */
-overflow: hidden;
-transition: max-height 0.4s ease-out, padding 0.4s ease-out; /* Animação suave */
-color: var(--dark-muted-text);
+    background-color: #323232; padding: 0 20px; max-height: 0;
+    overflow: hidden; transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+    color: var(--dark-muted-text);
 }
-/* Para mostrar a resposta quando o checkbox invisível é marcado */
-.faq-checkbox {
-display: none; /* Esconde o checkbox */
-}
+.faq-checkbox { display: none; }
+
 .faq-checkbox:checked + .faq-question + .faq-answer {
-max-height: 200px; /* Altura máxima para mostrar o conteúdo (ajuste conforme necessário) */
-padding: 15px 20px;
+    max-height: 200px; padding: 15px 20px;
 }
-/* Estilo para a seta indicadora */
+
 .faq-question::before {
-content: '\f282'; /* Código do ícone chevron-down do Bootstrap Icons */
-font-family: 'bootstrap-icons';
-float: right;
-transition: transform 0.3s ease;
+    content: '\f282'; font-family: 'bootstrap-icons';
+    float: right; transition: transform 0.3s ease;
 }
 .faq-checkbox:checked + .faq-question::before {
-content: '\f286'; /* Código do ícone chevron-up */
-transform: rotate(180deg);
+    content: '\f286'; transform: rotate(180deg);
 }
