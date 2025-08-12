@@ -1,8 +1,14 @@
-from datetime import datetime, time
+from datetime import datetime, date
 import pytest
 import os
 import sys
 import tempfile
+import sqlite3
+import gc
+import time
+from contextlib import closing
+
+# Imports dos seus modelos
 from data.models.cliente_model import *
 from data.models.usuario_model import *
 from data.repo.usuario_repo import *
@@ -10,8 +16,6 @@ from data.models.profissional_model import *
 from data.repo.profissional_repo import *
 from data.models.administrador_model import *
 from data.repo.administrador_repo import *
-from data.repo.administrador_repo import *
-from datetime import date
 from data.models.plano_model import *
 from data.repo.plano_repo import *
 from data.models.treino_model import *
@@ -19,47 +23,81 @@ from data.repo.treino_repo import *
 from data.models.artigo_model import *
 from data.models.salario_model import Salario
 from data.models.denuncia_model import Denuncia
-from datetime import datetime
 from data.models.avaliacao_artigo_model import AvaliacaoArtigo
 from data.models.visualizacao_artigo_model import VisualizacaoArtigo
-from data.models.assinatura_model import *  
-@pytest.fixture
-def avaliacao_artigo_exemplo(usuario_exemplo, artigo_exemplo) -> AvaliacaoArtigo:
-    """Fixture para uma avaliação de artigo feita por um usuário."""
-    return AvaliacaoArtigo(
-        id_avaliacao=0,
-        id_artigo=artigo_exemplo.id_artigo,
-        id_usuario=usuario_exemplo.id,
-        nota=4.5,
-        Data_avaliacao=date.today(),
-        Ativo=True
-    )
-
-
-# from data.repo.treino_repo import *
-
+from data.models.assinatura_model import *
+from data.models.dieta_model import Dieta
 
 # Configuração do ambiente de teste
-# Adiciona o diretório raiz do projeto ao PYTHONPATH
-# Isso permite importar módulos do projeto nos testes
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, project_root)
 
-# Fixture para criar um banco de dados temporário para testes
+
+def _safe_remove_db_file(db_path):
+    """
+    Remove o arquivo de banco de dados de forma segura,
+    com múltiplas tentativas para lidar com locks do Windows.
+    """
+    if not os.path.exists(db_path):
+        return
+    
+    max_attempts = 10
+    wait_time = 0.1
+    
+    for attempt in range(max_attempts):
+        try:
+            # Tenta conectar e fechar explicitamente para liberar locks
+            with closing(sqlite3.connect(db_path)) as conn:
+                pass
+            
+            # Força garbage collection
+            gc.collect()
+            
+            # Tenta remover o arquivo
+            os.unlink(db_path)
+            return
+            
+        except PermissionError:
+            if attempt < max_attempts - 1:
+                time.sleep(wait_time)
+                wait_time *= 1.2  # Aumenta o tempo de espera progressivamente
+                gc.collect()
+            else:
+                print(f"Warning: Não foi possível deletar {db_path} após {max_attempts} tentativas")
+        except Exception as e:
+            print(f"Warning: Erro inesperado ao deletar {db_path}: {e}")
+            return
+
+
 @pytest.fixture
 def test_db():
-    # Cria um arquivo temporário para o banco de dados
+    """
+    Fixture que cria um banco de dados SQLite temporário para testes
+    e garante a limpeza adequada dos recursos no Windows.
+    """
     db_fd, db_path = tempfile.mkstemp(suffix='.db')
-    # Configura a variável de ambiente para usar o banco de teste
     os.environ['TEST_DATABASE_PATH'] = db_path
-    # Retorna o caminho do banco de dados temporário
-    yield db_path    
-    # Remove o arquivo temporário ao concluir o teste
-    os.close(db_fd)
-    if os.path.exists(db_path):
-        os.unlink(db_path)
+    
+    try:
+        yield db_path
+    finally:
+        # Força garbage collection para fechar conexões não referenciadas
+        gc.collect()
+        
+        # Fecha o file descriptor original
+        try:
+            os.close(db_fd)
+        except Exception:
+            pass
+        
+        # Aguarda um momento para que o SO libere recursos
+        time.sleep(0.05)
+        
+        # Remove o arquivo de forma segura
+        _safe_remove_db_file(db_path)
 
 
+# Suas fixtures existentes
 @pytest.fixture
 def usuario_exemplo() -> Usuario:
     """Objeto padrão de usuário para uso em testes."""
@@ -71,21 +109,6 @@ def usuario_exemplo() -> Usuario:
         data_nascimento="2000-01-15",
         sexo="F",
         tipo_usuario="cliente"
-    )
-
-
-@pytest.fixture
-def assinatura_exemplo(cliente_exemplo, plano_exemplo) -> Assinaturas:
-    """Objeto padrão de assinatura para uso em testes."""
-    return Assinaturas(
-        id_assinatura=0,
-        id_cliente=cliente_exemplo.id,
-        id_plano=plano_exemplo.id_plano,
-        data_inicio=date(2024, 1, 1),
-        data_fim=date(2024, 1, 31),
-        status="ativa",
-        valor_pago=49.90,
-        ativo=True
     )
 
 
@@ -104,9 +127,10 @@ def nutricionista_exemplo() -> Profissional:
         registro_profissional="123456-G/DF"
     )
 
+
 @pytest.fixture
 def administrador_exemplo() -> Administrador:
-    """Objeto padrão de usuário para uso em testes."""
+    """Objeto padrão de administrador para uso em testes."""
     return Administrador(
         id=0,
         nome="Usuario Exemplo",
@@ -115,12 +139,13 @@ def administrador_exemplo() -> Administrador:
         data_nascimento="2000-01-15",
         sexo="F",
         tipo_usuario="cliente",
-        master= True
+        master=True
     )
+
 
 @pytest.fixture
 def cliente_exemplo() -> Cliente:
-    """Objeto padrão de usuário para uso em testes."""
+    """Objeto padrão de cliente para uso em testes."""
     return Cliente(
         id=0,
         nome="Usuario Exemplo",
@@ -132,23 +157,7 @@ def cliente_exemplo() -> Cliente:
         tipo_conta="padrão"
     )
 
-# @pytest.fixture
-# def educador_exemplo() -> EducadorFisico:
-#     """Objeto de exemplo do tipo Educador Físico."""
-#     return EducadorFisico(
-#         id=0,
-#         nome="Educador Físico Exemplo",
-#         email="educador@teste.com",
-#         senha_hash="senha_super_segura_123",
-#         data_nascimento="1990-05-15",
-#         sexo="M",
-#         tipo_usuario="profissional",
-#         tipo_profissional="educador_fisico",
-#         status="ativo",
-#         cref="123456-G/DF"
-#     )
 
-      
 @pytest.fixture
 def plano_exemplo() -> Plano:
     """Objeto padrão de plano para uso em testes."""
@@ -163,17 +172,10 @@ def plano_exemplo() -> Plano:
         ativo=True
     )
 
-import pytest
-from datetime import date
-from data.models.dieta_model import Dieta
 
 @pytest.fixture
 def dieta_exemplo(cliente_exemplo, nutricionista_exemplo):
-    """
-    Fixture para criar um objeto Dieta de exemplo.
-    Assume que cliente_exemplo e nutricionista_exemplo já existem e têm id definidos.
-    """
-    # Normalmente, o id será definido após inserção no banco, aqui colocamos 0 como placeholder
+    """Fixture para criar um objeto Dieta de exemplo."""
     return Dieta(
         id_dieta=0,
         id_cliente=cliente_exemplo.id,
@@ -186,6 +188,7 @@ def dieta_exemplo(cliente_exemplo, nutricionista_exemplo):
         especificacoes="Sem glúten, sem lactose.",
         tipo_dieta="Low Carb"
     )
+
 
 @pytest.fixture
 def treino_exemplo(cliente_exemplo, nutricionista_exemplo):
@@ -203,6 +206,7 @@ def treino_exemplo(cliente_exemplo, nutricionista_exemplo):
         visibilidade="Privado"
     )
 
+
 @pytest.fixture
 def profissional_exemplo() -> Profissional:
     return Profissional(
@@ -212,11 +216,12 @@ def profissional_exemplo() -> Profissional:
         senha_hash="senha_segura",
         data_nascimento="1990-06-20",
         sexo="M",
-        tipo_usuario="educador_fisico",  # ✅ AGORA VÁLIDO
+        tipo_usuario="educador_fisico",
         ativo=True,
         ano_formacao=2014,
         registro_profissional="EDU123456-G/SP"
     )
+
 
 @pytest.fixture
 def artigo_exemplo(profissional_exemplo):
@@ -232,9 +237,6 @@ def artigo_exemplo(profissional_exemplo):
         avaliacao=1
     )
 
-import pytest
-from datetime import date
-from data.models.salario_model import Salario
 
 @pytest.fixture
 def salario_exemplo(profissional_exemplo) -> Salario:
@@ -254,8 +256,9 @@ def salario_exemplo(profissional_exemplo) -> Salario:
         ativo=True
     )
 
+
 @pytest.fixture
-def denuncia_exemplo(usuario_exemplo, profissional_exemplo, administrador_exemplo)-> Denuncia:
+def denuncia_exemplo(usuario_exemplo, profissional_exemplo, administrador_exemplo) -> Denuncia:
     """Retorna uma denúncia de exemplo entre dois usuários fictícios."""
     return Denuncia(
         id_denuncia=0,
@@ -272,7 +275,8 @@ def denuncia_exemplo(usuario_exemplo, profissional_exemplo, administrador_exempl
         observacoes_admin="Aguardando análise",
         ativo=True
     )
-    
+
+
 @pytest.fixture
 def avaliacao_artigo_exemplo(usuario_exemplo, artigo_exemplo) -> AvaliacaoArtigo:
     """Fixture para uma avaliação de artigo feita por um usuário."""
@@ -283,9 +287,8 @@ def avaliacao_artigo_exemplo(usuario_exemplo, artigo_exemplo) -> AvaliacaoArtigo
         nota=4.5,
         Data_avaliacao=date.today(),
         Ativo=True
-        
     )
-    
+
 
 @pytest.fixture
 def visualizacao_artigo_exemplo(usuario_exemplo, artigo_exemplo) -> VisualizacaoArtigo:
@@ -301,13 +304,14 @@ def visualizacao_artigo_exemplo(usuario_exemplo, artigo_exemplo) -> Visualizacao
         Ativo=True
     )
 
+
 @pytest.fixture
 def assinatura_exemplo(cliente_exemplo, plano_exemplo) -> Assinaturas:
     """Objeto padrão de assinatura para uso em testes."""
     return Assinaturas(
-        id_assinatura=0,                 # Id fictício, normalmente criado no banco
-        id_cliente=cliente_exemplo.id,  # Usa fixture cliente_exemplo
-        id_plano=plano_exemplo.id_plano, # Usa fixture plano_exemplo
+        id_assinatura=0,
+        id_cliente=cliente_exemplo.id,
+        id_plano=plano_exemplo.id_plano,
         data_inicio=date(2024, 1, 1),
         data_fim=date(2024, 1, 31),
         status="ativa",

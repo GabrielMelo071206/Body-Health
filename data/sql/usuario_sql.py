@@ -45,3 +45,12 @@ id, nome, email, senha_hash, data_nascimento, sexo, tipo_usuario
 FROM usuario
 ORDER BY nome
 """
+
+OBTER_POR_EMAIL = """
+SELECT
+    id, nome, email, senha_hash, data_nascimento, sexo, tipo_usuario
+FROM
+    usuarios
+WHERE
+    email = ?;
+"""

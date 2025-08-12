@@ -1,0 +1,38 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h2 class="mb-4">Lista de Usuários Cadastrados</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">E-mail</th>
+                    <th scope="col">Tipo de Usuário</th>
+                    <th scope="col">Data de Nascimento</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                <tr>
+                    <th scope="row">{{ loop.index }}</th>
+                    <td>{{ usuario.nome }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.tipo_usuario }}</td>
+                    <td>{{ usuario.data_nascimento }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5">Nenhum usuário cadastrado.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        // Aqui você pode adicionar scripts específicos para esta página, se necessário
+    </script>
+{% endblock %}

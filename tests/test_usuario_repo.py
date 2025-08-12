@@ -98,3 +98,4 @@ class TestUsuarioRepo:
         resultado = usuario_repo.excluir_usuario(999)
         # Assert
         assert resultado == False, "A exclusão de um usuário inexistente deveria retornar False"
+
