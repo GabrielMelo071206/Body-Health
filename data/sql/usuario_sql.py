@@ -54,3 +54,18 @@ FROM
 WHERE
     email = ?;
 """
+
+CREEATE_TRIGGER = """
+CREATE TRIGGER insere_cliente_ou_profissional
+AFTER INSERT ON usuario
+FOR EACH ROW
+BEGIN
+    IF NEW.tipo_usuario = 'cliente' THEN
+        INSERT INTO clientes (id_usuario, nome, email, data_nascimento)
+        VALUES (NEW.id, NEW.nome, NEW.email, NEW.data_nascimento);
+    ELSEIF NEW.tipo_usuario IN ('educador_fisico', 'nutricionista') THEN
+        INSERT INTO profissionais (id_usuario, nome, email, data_nascimento)
+        VALUES (NEW.id, NEW.nome, NEW.email, NEW.data_nascimento);
+    END IF;
+END;
+"""

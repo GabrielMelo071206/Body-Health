@@ -76,7 +76,6 @@ async def get_usuarios():
 # ----------------------------------------------------
 # ROTA DE PROCESSAMENTO DO FORMULÁRIO (POST /cadastro)
 # ----------------------------------------------------
-
 @app.post("/cadastro")
 async def post_cadastro(
     tipoConta: str = Form(...),
@@ -88,7 +87,7 @@ async def post_cadastro(
     nomeProfissional: str = Form(None),
     cpfProfissional: str = Form(None),
     dataNascimentoProfissional: str = Form(None),
-    tipoProfissional: str = Form(None),
+    tipoProfissional: str = Form(None), # Este é o valor que precisa ser validado
     numeroRegistro: str = Form(None),
     diplomaFoto: UploadFile = File(None)
 ):
@@ -103,6 +102,11 @@ async def post_cadastro(
     elif tipoConta == "profissional":
         nome = nomeProfissional
         data_nascimento = dataNascimentoProfissional or ""
+        
+        # Garanta que o tipo de usuário seja válido
+        if tipoProfissional not in ["educador_fisico", "nutricionista"]:
+            raise HTTPException(status_code=400, detail="Tipo de profissional inválido")
+            
         tipo_usuario = tipoProfissional
     else:
         raise HTTPException(status_code=400, detail="Tipo de conta inválido")
@@ -126,7 +130,6 @@ async def post_cadastro(
         raise HTTPException(status_code=500, detail="Erro ao salvar usuário")
 
     return RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
-
 # ----------------------------------------------------
 # EXECUÇÃO DA APLICAÇÃO
 # ----------------------------------------------------
