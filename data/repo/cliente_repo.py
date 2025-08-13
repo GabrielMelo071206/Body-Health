@@ -60,32 +60,7 @@ def obter_cliente_por_id(id: int) -> Optional[Cliente]:
             sexo=row["sexo"],
             tipo_usuario=row["tipo_usuario"]
         )
-
-# --- FUNÇÃO ADICIONADA PARA RESOLVER O IMPORTERROR ---
-def obter_cliente_por_email(email: str) -> Optional[Cliente]:
-    """
-    Busca os dados de um cliente e seu usuário genérico por e-mail.
-    """
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        # O SQL aqui precisa fazer um JOIN entre as tabelas `usuarios` e `clientes`
-        # para obter todos os dados necessários.
-        cursor.execute(OBTER_POR_EMAIL, (email,))
-        row = cursor.fetchone()
-        if row is None:
-            return None
-        return Cliente(
-            id=row["id"], # ou id_cliente, dependendo da sua consulta
-            nome=row["nome"],
-            email=row["email"],
-            senha_hash=row["senha_hash"],
-            data_nascimento=row["data_nascimento"],
-            sexo=row["sexo"],
-            tipo_usuario=row["tipo_usuario"],
-            tipo_conta=row["tipo_conta"] # Campo específico do cliente
-        )
-# ---------------------------------------------------
-
+    
 def obter_todos_clientes() -> list[Cliente]:
     with get_connection() as conn:
         cursor = conn.cursor()
